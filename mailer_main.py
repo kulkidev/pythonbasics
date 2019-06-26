@@ -94,7 +94,7 @@ def create_email_template(employee_list):
     return html_email_template_part1 + html_content + html_email_template_part2
 
 
-create_email_template_and_send(read_report('expired_accounts.xlsx', 'Sheet1'))
+create_email_template_and_send(read_report('data/expired_accounts.xlsx', 'Sheet1'))
 
 
 

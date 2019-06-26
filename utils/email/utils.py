@@ -1,6 +1,7 @@
 import smtplib
 from email.mime.text import MIMEText
 
+
 # The below method will send email
 # required parameters are:
 # sender_email_id, sender_password,
