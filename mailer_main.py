@@ -84,6 +84,7 @@ def create_email_template_and_send(dormant_employees):
                    465)
 
 
+
 # this function creates the HTML email body
 # content of the email
 def create_email_template(employee_list):
