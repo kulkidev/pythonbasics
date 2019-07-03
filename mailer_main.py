@@ -73,13 +73,13 @@ def read_report(input_file_name, input_sheet_name):
 def create_email_template_and_send(dormant_employees):
     for manager_email_id in dormant_employees:
         email_body_content = create_email_template(dormant_employees.get(manager_email_id))
-        msg = build_message("pyemailtest111@gmail.com",
+        msg = build_message("dummy.account@gmail.com",
                    manager_email_id,
                    "De-activated user accounts summary",
                    email_body_content
                    )
         send_email(msg,
-                   "Emailtest!1",
+                   "Dummy password",
                    'smtp.gmail.com',
                    465)
 
