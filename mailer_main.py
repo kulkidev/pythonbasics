@@ -1,6 +1,6 @@
 import openpyxl as xl
 import datetime
-from utils.email.utils import send_email
+from utils.email.utils import send_email,build_message
 
 html_email_template_part1 = """
 <!DOCTYPE html>
@@ -26,8 +26,9 @@ html_email_template_part2 = """
     </html>
 """
 
+
 class Employee:
-    def __init__(self,first_name,last_name,email,last_login_date,manager_email_id):
+    def __init__(self,first_name, last_name, email, last_login_date, manager_email_id):
         self.first_name = first_name
         self.last_name = last_name
         self.full_name = first_name + " " + last_name
@@ -47,20 +48,24 @@ def read_report(input_file_name, input_sheet_name):
     workbook = xl.load_workbook(input_file_name)
     sheet = workbook[input_sheet_name]
 
-    for row_number in range(2,sheet.max_row + 1):
+    print(sheet.max_row + 1)
+    for row_number in range(2, sheet.max_row + 1):
         employee = Employee(sheet.cell(row=row_number, column=1).value,
                             sheet.cell(row=row_number, column=2).value,
                             sheet.cell(row=row_number, column=3).value,
                             sheet.cell(row=row_number, column=4).value,
                             sheet.cell(row=row_number, column=5).value)
+        # print(f'employee : {employee.full_name} has manager {employee.manager_email_id}')
         if dormant_employee_dict.get(employee.manager_email_id):
-            existing_manager_list = dormant_employee_dict.get(employee.manager_email_id)
-            existing_manager_list.append(employee)
+            # print(f'manager : {employee.manager_email_id} exists')
+            existing_employee_list = dormant_employee_dict.get(employee.manager_email_id)
+            existing_employee_list.append(employee)
         else:
+            # print(f'manager : {employee.manager_email_id} does not exist')
             new_list = [employee]
             dormant_employee_dict[employee.manager_email_id] = new_list
 
-        return dormant_employee_dict
+    return dormant_employee_dict
 
 
 # This function connects to mail server and sends individual email
@@ -68,11 +73,13 @@ def read_report(input_file_name, input_sheet_name):
 def create_email_template_and_send(dormant_employees):
     for manager_email_id in dormant_employees:
         email_body_content = create_email_template(dormant_employees.get(manager_email_id))
-        send_email("xxxxx@gmail.com",
-                   "dummy password",
+        msg = build_message("pyemailtest111@gmail.com",
                    manager_email_id,
                    "De-activated user accounts summary",
-                   email_body_content,
+                   email_body_content
+                   )
+        send_email(msg,
+                   "Emailtest!1",
                    'smtp.gmail.com',
                    465)
 
